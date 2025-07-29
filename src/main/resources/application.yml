@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: ASM2-PolyOE
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=PolyOE;encrypt=true;trustServerCertificate=true
+    username: sa
+    password: songlong
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+mybatis:
+  config-location: classpath:/static/mybatis/mybatis-config.xml
+  mapper-locations: classpath:/static/mybatis/mapper/*.xml
+
+server:
+  port: 1212

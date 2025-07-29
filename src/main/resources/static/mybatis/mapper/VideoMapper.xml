@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java4.asm2polyoe.mapper.VideoMapper">
+    <select id="findAll" resultType="Video">
+        SELECT Id as id, Title as title, Poster as poster, [Views] as views, Description as description, Active as active 
+        FROM Video
+    </select>
+
+    <select id="findById" parameterType="string" resultType="Video">
+        SELECT Id as id, Title as title, Poster as poster, [Views] as views, Description as description, Active as active 
+        FROM Video WHERE Id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="Video">
+        INSERT INTO Video (Id, Title, Poster, [Views], Description, Active)
+        VALUES (#{id}, #{title}, #{poster}, #{views}, #{description}, #{active})
+    </insert>
+
+    <update id="update" parameterType="Video">
+        UPDATE Video
+        SET Title = #{title},
+            Poster = #{poster},
+            [Views] = #{views},
+            Description = #{description},
+            Active = #{active}
+        WHERE Id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="string">
+        DELETE FROM Video WHERE Id = #{id}
+    </delete>
+</mapper>

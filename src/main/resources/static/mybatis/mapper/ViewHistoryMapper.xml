@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java4.asm2polyoe.mapper.ViewHistoryMapper">
+    <select id="findAll" resultType="ViewHistory">
+        SELECT Id as id, UserId as userId, VideoId as videoId, ViewDate as viewDate 
+        FROM ViewHistory
+    </select>
+
+    <select id="findById" parameterType="long" resultType="ViewHistory">
+        SELECT Id as id, UserId as userId, VideoId as videoId, ViewDate as viewDate 
+        FROM ViewHistory WHERE Id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="ViewHistory">
+        INSERT INTO ViewHistory (Id, UserId, VideoId, ViewDate)
+        VALUES (#{id}, #{userId}, #{videoId}, #{viewDate})
+    </insert>
+
+    <update id="update" parameterType="ViewHistory">
+        UPDATE ViewHistory
+        SET UserId = #{userId},
+            VideoId = #{videoId},
+            ViewDate = #{viewDate}
+        WHERE Id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM ViewHistory WHERE Id = #{id}
+    </delete>
+</mapper>

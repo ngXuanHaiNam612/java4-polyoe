@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- Các phần cấu hình sẽ nằm bên trong đây -->
+    <typeAliases>
+        <typeAlias type="com.java4.asm2polyoe.entity.Favorite" alias="Favorite"/>
+        <typeAlias type="com.java4.asm2polyoe.entity.Share" alias="Share"/>
+        <typeAlias type="com.java4.asm2polyoe.entity.User" alias="User"/>
+        <typeAlias type="com.java4.asm2polyoe.entity.Video" alias="Video"/>
+        <typeAlias type="com.java4.asm2polyoe.entity.ViewHistory" alias="ViewHistory"/>
+    </typeAliases>
+</configuration>

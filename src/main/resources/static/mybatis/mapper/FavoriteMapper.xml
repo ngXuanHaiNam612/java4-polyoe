@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java4.asm2polyoe.mapper.FavoriteMapper">
+    <select id="findAll" resultType="Favorite">
+        SELECT Id as id, UserId as userId, VideoId as videoId, LikeDate as likeDate 
+        FROM Favorite
+    </select>
+
+    <select id="findById" parameterType="long" resultType="Favorite">
+        SELECT Id as id, UserId as userId, VideoId as videoId, LikeDate as likeDate 
+        FROM Favorite WHERE Id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="Favorite">
+        INSERT INTO Favorite (Id, UserId, VideoId, LikeDate)
+        VALUES (#{id}, #{userId}, #{videoId}, #{likeDate})
+    </insert>
+
+    <update id="update" parameterType="Favorite">
+        UPDATE Favorite
+        SET UserId = #{userId},
+            VideoId = #{videoId},
+            LikeDate = #{likeDate}
+        WHERE Id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM Favorite WHERE Id = #{id}
+    </delete>
+</mapper>
