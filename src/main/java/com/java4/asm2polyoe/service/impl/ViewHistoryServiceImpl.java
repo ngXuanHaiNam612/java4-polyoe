@@ -14,7 +14,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ViewHistoryServiceImpl implements ViewHistoryService {
-    
     private final ViewHistoryMapper viewHistoryMapper;
 
     @Override
@@ -28,7 +27,7 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATCH_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATCH_EXCEPTION, e); // Truyền e
         }
     }
 
@@ -38,17 +37,29 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
             if (id == null) {
                 throw new AppException(ErrorCode.NULL_POINTER_EXCEPTION);
             }
-            
             ViewHistory viewHistory = viewHistoryMapper.findById(id);
             if (viewHistory == null) {
                 throw new AppException(ErrorCode.VIEWHISTORY_NOT_FOUND);
             }
-            
             return viewHistory;
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATCH_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATCH_EXCEPTION, e); // Truyền e
+        }
+    }
+
+    @Override
+    public ViewHistory findByUserIdAndVideoId(String userId, String videoId) {
+        try {
+            if (userId == null || videoId == null) {
+                throw new AppException(ErrorCode.NULL_POINTER_EXCEPTION);
+            }
+            return viewHistoryMapper.findByUserIdAndVideoId(userId, videoId);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.UNCATCH_EXCEPTION, e); // Truyền e
         }
     }
 
@@ -58,27 +69,27 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
             if (history == null) {
                 throw new AppException(ErrorCode.NULL_POINTER_EXCEPTION);
             }
-            
+
             if (history.getViewDate() == null) {
                 history.setViewDate(new Date());
             }
-            
+
             // Check if view history already exists for same user and video
             List<ViewHistory> existingHistories = viewHistoryMapper.findAll();
             boolean exists = existingHistories.stream()
-                    .anyMatch(vh -> vh.getUserId().equals(history.getUserId()) && 
-                                  vh.getVideoId().equals(history.getVideoId()));
-            
+                    .anyMatch(vh -> vh.getUserId().equals(history.getUserId()) &&
+                            vh.getVideoId().equals(history.getVideoId()));
+
             if (exists) {
                 throw new AppException(ErrorCode.VIEWHISTORY_ALREADY_EXISTS);
             }
-            
+
             viewHistoryMapper.insert(history);
             return history;
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATCH_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATCH_EXCEPTION, e); // Truyền e
         }
     }
 
@@ -88,20 +99,19 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
             if (id == null || history == null) {
                 throw new AppException(ErrorCode.NULL_POINTER_EXCEPTION);
             }
-            
             // Check if view history exists
             ViewHistory existingHistory = findById(id);
             if (existingHistory == null) {
                 throw new AppException(ErrorCode.VIEWHISTORY_NOT_FOUND);
             }
-            
+
             history.setId(id);
             viewHistoryMapper.update(history);
             return history;
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATCH_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATCH_EXCEPTION, e); // Truyền e
         }
     }
 
@@ -111,18 +121,17 @@ public class ViewHistoryServiceImpl implements ViewHistoryService {
             if (id == null) {
                 throw new AppException(ErrorCode.NULL_POINTER_EXCEPTION);
             }
-            
             // Check if view history exists before deleting
             ViewHistory existingHistory = findById(id);
             if (existingHistory == null) {
                 throw new AppException(ErrorCode.VIEWHISTORY_NOT_FOUND);
             }
-            
             viewHistoryMapper.delete(id);
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATCH_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATCH_EXCEPTION, e); // Truyền e
         }
     }
 }
+

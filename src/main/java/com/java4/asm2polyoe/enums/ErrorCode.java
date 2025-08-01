@@ -1,48 +1,68 @@
 package com.java4.asm2polyoe.enums;
 
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
-@AllArgsConstructor
 public enum ErrorCode {
+    UNCATCH_EXCEPTION(9999, "Uncatch exception! không bắt được ngoại lệ", HttpStatus.INTERNAL_SERVER_ERROR),
+    NULL_POINTER_EXCEPTION(1000, "Null pointer exception!", HttpStatus.INTERNAL_SERVER_ERROR),
 
-    BAD_SQL(500, "Bad SQL! Check lại SQL"),
-    UNCATCH_EXCEPTION(501, "Uncatch exception! không bắt được ngoại lệ"),
-    NULL_POINTER_EXCEPTION(503, "Null Pointer! dữ liệu trả về trống"),
+    // User related errors
+    USER_NOT_FOUND(2000, "User not found!", HttpStatus.NOT_FOUND),
+    USER_ALREADY_EXISTS(2001, "User already exists!", HttpStatus.CONFLICT),
+    INVALID_CREDENTIALS(2002, "Invalid username or password!", HttpStatus.UNAUTHORIZED),
+    PASSWORD_MISMATCH(2003, "Current password does not match!", HttpStatus.BAD_REQUEST),
+    EMAIL_NOT_FOUND(2004, "Email not found!", HttpStatus.NOT_FOUND),
+    LIST_USER_EMPTY(2005, "List user is empty!", HttpStatus.NOT_FOUND),
+    EMAIL_ALREADY_EXISTS(2006, "Email already exists!", HttpStatus.CONFLICT),
+    CURRENT_PASSWORD_INCORRECT(2007, "Current password is incorrect!", HttpStatus.BAD_REQUEST),
 
-    LIST_USER_EMPTY(1000, "List user is empty!"),
-    PASSWORD_INCORRECT(1001, "Password incorrect!"),
-    USER_NOT_FOUND(1002, "User not found!"),
+    // Video related errors
+    VIDEO_NOT_FOUND(3000, "Video not found!", HttpStatus.NOT_FOUND),
+    LIST_VIDEO_EMPTY(3001, "List video is empty!", HttpStatus.NOT_FOUND),
+    VIDEO_ALREADY_EXISTS(3002, "Video with this ID already exists!", HttpStatus.CONFLICT),
 
-    // Video errors
-    LIST_VIDEO_EMPTY(2000, "List video is empty!"),
-    VIDEO_NOT_FOUND(2001, "Video not found!"),
-    VIDEO_ALREADY_EXISTS(2002, "Video already exists!"),
+    // Favorite related errors
+    FAVORITE_NOT_FOUND(4000, "Favorite not found!", HttpStatus.NOT_FOUND),
+    FAVORITE_ALREADY_EXISTS(4001, "Favorite already exists for this user and video!", HttpStatus.CONFLICT),
+    LIST_FAVORITE_EMPTY(4002, "List favorite is empty!", HttpStatus.NOT_FOUND),
 
-    // Favorite errors
-    LIST_FAVORITE_EMPTY(3000, "List favorite is empty!"),
-    FAVORITE_NOT_FOUND(3001, "Favorite not found!"),
-    FAVORITE_ALREADY_EXISTS(3002, "Favorite already exists!"),
+    // Share related errors
+    SHARE_NOT_FOUND(5000, "Share not found!", HttpStatus.NOT_FOUND),
+    SHARE_ALREADY_EXISTS(5001, "Share already exists for this user, video, and email!", HttpStatus.CONFLICT),
+    LIST_SHARE_EMPTY(5002, "List share is empty!", HttpStatus.NOT_FOUND),
 
-    // Share errors
-    LIST_SHARE_EMPTY(4000, "List share is empty!"),
-    SHARE_NOT_FOUND(4001, "Share not found!"),
-    SHARE_ALREADY_EXISTS(4002, "Share already exists!"),
+    // View History related errors
+    VIEWHISTORY_NOT_FOUND(7000, "View history not found!", HttpStatus.NOT_FOUND),
+    VIEWHISTORY_ALREADY_EXISTS(7001, "View history already exists for this user and video!", HttpStatus.CONFLICT),
+    LIST_VIEWHISTORY_EMPTY(7002, "List view history is empty!", HttpStatus.NOT_FOUND),
 
-    // ViewHistory errors
-    LIST_VIEWHISTORY_EMPTY(5000, "List view history is empty!"),
-    VIEWHISTORY_NOT_FOUND(5001, "View history not found!"),
-    VIEWHISTORY_ALREADY_EXISTS(5002, "View history already exists!"),
+    // Report related errors
+    NO_REPORT_DATA_FOUND(6000, "No report data found!", HttpStatus.NOT_FOUND),
 
-    HTTP_STATUS_200(200, "ok"),
-    HTTP_STATUS_400(400, "request error"),
-    HTTP_STATUS_401(401, "no authentication"),
-    HTTP_STATUS_403(403, "no authorities"),
-    HTTP_STATUS_500(500, "server error");
+    // Comment related errors (NEW)
+    COMMENT_NOT_FOUND(8000, "Comment not found!", HttpStatus.NOT_FOUND),
+    LIST_COMMENT_EMPTY(8001, "List comment is empty!", HttpStatus.NOT_FOUND),
+    COMMENT_CONTENT_EMPTY(8002, "Comment content cannot be empty!", HttpStatus.BAD_REQUEST),
+    COMMENT_NOT_AUTHORIZED(8003, "You are not authorized to delete this comment!", HttpStatus.FORBIDDEN);
 
-    private final Integer status;
+
+    private final int code;
     private final String message;
+    private final HttpStatus httpStatus;
 
+    ErrorCode(int code, String message, HttpStatus httpStatus) {
+        this.code = code;
+        this.message = message;
+        this.httpStatus = httpStatus;
+    }
+
+    public int getStatus() {
+        return httpStatus.value();
+    }
 }
+
+
+
+

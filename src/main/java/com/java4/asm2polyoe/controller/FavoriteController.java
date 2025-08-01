@@ -5,13 +5,13 @@ import com.java4.asm2polyoe.entity.Favorite;
 import com.java4.asm2polyoe.service.FavoriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
 
 @RestController
 @RequestMapping("/api/favorites")
 @RequiredArgsConstructor
 public class FavoriteController {
-
     private final FavoriteService favoriteService;
 
     @GetMapping
@@ -68,3 +68,4 @@ public class FavoriteController {
                 .build();
     }
 }
+

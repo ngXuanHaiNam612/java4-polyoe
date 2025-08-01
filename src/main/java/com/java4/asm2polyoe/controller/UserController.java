@@ -1,20 +1,22 @@
 package com.java4.asm2polyoe.controller;
 
-
 import com.java4.asm2polyoe.dto.response.ApiResponse;
-import com.java4.asm2polyoe.entity.User;
-import com.java4.asm2polyoe.service.UseService;
+import com.java4.asm2polyoe.entity.User; // Đảm bảo import đúng entity.User
+import com.java4.asm2polyoe.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import java.util.*;
+
+import java.util.List;
+import java.util.Map; // Import Map
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/users") // Giữ nguyên RequestMapping hiện tại của bạn
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UseService userService;
+    private final UserService userService;
 
+    // --- Các phương thức CRUD hiện có ---
     @GetMapping
     public ApiResponse<List<User>> getAllUsers() {
         List<User> users = userService.findAll();
@@ -37,7 +39,7 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping
+    @PostMapping // Endpoint này dùng cho admin tạo user mới
     public ApiResponse<User> createUser(@RequestBody User user) {
         User createdUser = userService.save(user);
         return ApiResponse.<User>builder()
@@ -68,5 +70,70 @@ public class UserController {
                 .message("User deleted")
                 .build();
     }
+
+    // --- Các phương thức xác thực mới ---
+
+    @PostMapping("/login")
+    public ApiResponse<User> login(@RequestBody User loginRequest) { // Sử dụng User entity trực tiếp
+        User user = userService.login(loginRequest.getId(), loginRequest.getPassword());
+        return ApiResponse.<User>builder()
+                .status(200)
+                .success(true)
+                .data(user)
+                .message("Login successful")
+                .build();
+    }
+
+    @PostMapping("/register")
+    public ApiResponse<User> register(@RequestBody User registerRequest) { // Sử dụng User entity trực tiếp
+        User newUser = userService.register(registerRequest);
+        return ApiResponse.<User>builder()
+                .status(201)
+                .success(true)
+                .data(newUser)
+                .message("Registration successful")
+                .build();
+    }
+
+    @PostMapping("/forgot-password")
+    public ApiResponse<Void> forgotPassword(@RequestBody Map<String, String> requestBody) {
+        String email = requestBody.get("email");
+        userService.forgotPassword(email);
+        return ApiResponse.<Void>builder()
+                .status(200)
+                .success(true)
+                .message("Password reset email sent successfully")
+                .build();
+    }
+
+    @PutMapping("/change-password")
+    public ApiResponse<User> changePassword(@RequestBody Map<String, String> requestBody) {
+        // Lấy userId từ requestBody (frontend cần gửi userId)
+        String userId = requestBody.get("userId");
+        String currentPassword = requestBody.get("currentPassword");
+        String newPassword = requestBody.get("newPassword");
+
+        User updatedUser = userService.changePassword(userId, currentPassword, newPassword);
+        return ApiResponse.<User>builder()
+                .status(200)
+                .success(true)
+                .data(updatedUser)
+                .message("Password changed successfully")
+                .build();
+    }
+
+    @PutMapping("/profile")
+    public ApiResponse<User> updateProfile(@RequestBody User user) {
+        // Lấy userId từ đối tượng user được gửi lên
+        String userId = user.getId();
+        User updatedUser = userService.updateProfile(userId, user);
+        return ApiResponse.<User>builder()
+                .status(200)
+                .success(true)
+                .data(updatedUser)
+                .message("Profile updated successfully")
+                .build();
+    }
 }
+
 

@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FavoriteServiceImpl implements FavoriteService {
-    
+
     private final FavoriteMapper favoriteMapper;
 
     @Override
@@ -28,7 +28,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATCH_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATCH_EXCEPTION, e);
         }
     }
 
@@ -38,7 +38,6 @@ public class FavoriteServiceImpl implements FavoriteService {
             if (id == null) {
                 throw new AppException(ErrorCode.NULL_POINTER_EXCEPTION);
             }
-            
             Favorite favorite = favoriteMapper.findById(id);
             if (favorite == null) {
                 throw new AppException(ErrorCode.FAVORITE_NOT_FOUND);
@@ -47,37 +46,47 @@ public class FavoriteServiceImpl implements FavoriteService {
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATCH_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATCH_EXCEPTION, e);
+        }
+    }
+
+    @Override
+    public Favorite findByUserIdAndVideoId(String userId, String videoId) {
+        try {
+            if (userId == null || videoId == null) {
+                throw new AppException(ErrorCode.NULL_POINTER_EXCEPTION);
+            }
+            return favoriteMapper.findByUserIdAndVideoId(userId, videoId);
+        } catch (AppException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.UNCATCH_EXCEPTION, e);
         }
     }
 
     @Override
     public Favorite save(Favorite favorite) {
         try {
-            if (favorite == null) {
+            if (favorite == null || favorite.getUserId() == null || favorite.getVideoId() == null) {
                 throw new AppException(ErrorCode.NULL_POINTER_EXCEPTION);
             }
-            
+
             if (favorite.getLikeDate() == null) {
                 favorite.setLikeDate(new Date());
             }
-            
-            // Check if favorite already exists for same user and video
-            List<Favorite> existingFavorites = favoriteMapper.findAll();
-            boolean exists = existingFavorites.stream()
-                    .anyMatch(f -> f.getUserId().equals(favorite.getUserId()) && 
-                                 f.getVideoId().equals(favorite.getVideoId()));
-            
-            if (exists) {
+
+            // Kiểm tra xem favorite đã tồn tại chưa bằng phương thức mới
+            Favorite existingFavorite = findByUserIdAndVideoId(favorite.getUserId(), favorite.getVideoId());
+            if (existingFavorite != null) {
                 throw new AppException(ErrorCode.FAVORITE_ALREADY_EXISTS);
             }
-            
+
             favoriteMapper.insert(favorite);
-            return favorite;
+            return favorite; // favorite object now contains the generated ID
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATCH_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATCH_EXCEPTION, e);
         }
     }
 
@@ -87,20 +96,18 @@ public class FavoriteServiceImpl implements FavoriteService {
             if (id == null || favorite == null) {
                 throw new AppException(ErrorCode.NULL_POINTER_EXCEPTION);
             }
-            
-            // Check if favorite exists
             Favorite existingFavorite = findById(id);
             if (existingFavorite == null) {
                 throw new AppException(ErrorCode.FAVORITE_NOT_FOUND);
             }
-            
+
             favorite.setId(id);
             favoriteMapper.update(favorite);
             return favorite;
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATCH_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATCH_EXCEPTION, e);
         }
     }
 
@@ -110,18 +117,17 @@ public class FavoriteServiceImpl implements FavoriteService {
             if (id == null) {
                 throw new AppException(ErrorCode.NULL_POINTER_EXCEPTION);
             }
-            
-            // Check if favorite exists before deleting
             Favorite existingFavorite = findById(id);
             if (existingFavorite == null) {
                 throw new AppException(ErrorCode.FAVORITE_NOT_FOUND);
             }
-            
             favoriteMapper.delete(id);
         } catch (AppException e) {
             throw e;
         } catch (Exception e) {
-            throw new AppException(ErrorCode.UNCATCH_EXCEPTION);
+            throw new AppException(ErrorCode.UNCATCH_EXCEPTION, e);
         }
     }
 }
+
+
