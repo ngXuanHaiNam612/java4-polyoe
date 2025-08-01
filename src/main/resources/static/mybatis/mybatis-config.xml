@@ -10,5 +10,6 @@
         <typeAlias type="com.java4.asm2polyoe.entity.User" alias="User"/>
         <typeAlias type="com.java4.asm2polyoe.entity.Video" alias="Video"/>
         <typeAlias type="com.java4.asm2polyoe.entity.ViewHistory" alias="ViewHistory"/>
+        <typeAlias type="com.java4.asm2polyoe.entity.Comment" alias="Comment"/>
     </typeAliases>
 </configuration>

@@ -11,5 +11,7 @@ public interface ViewHistoryMapper {
     void insert(ViewHistory viewHistory);
     void update(ViewHistory viewHistory);
     void delete(Long id);
+
+    ViewHistory findByUserIdAndVideoId(String userId, String videoId);
 }
 

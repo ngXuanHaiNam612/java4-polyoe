@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java4.asm2polyoe.mapper.CommentMapper">
+
+    <select id="findAllByVideoId" parameterType="string" resultType="com.java4.asm2polyoe.entity.Comment">
+        SELECT Id as id, VideoId as videoId, UserId as userId, Content as content, CommentDate as commentDate
+        FROM Comment
+        WHERE VideoId = #{videoId}
+        ORDER BY CommentDate DESC
+    </select>
+
+    <select id="findById" parameterType="long" resultType="com.java4.asm2polyoe.entity.Comment">
+        SELECT Id as id, VideoId as videoId, UserId as userId, Content as content, CommentDate as commentDate
+        FROM Comment
+        WHERE Id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.java4.asm2polyoe.entity.Comment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Comment (VideoId, UserId, Content, CommentDate)
+        VALUES (#{videoId}, #{userId}, #{content}, #{commentDate})
+    </insert>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM Comment WHERE Id = #{id}
+    </delete>
+
+</mapper>

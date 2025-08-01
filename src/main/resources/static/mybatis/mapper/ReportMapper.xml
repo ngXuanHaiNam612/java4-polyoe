@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java4.asm2polyoe.mapper.ReportMapper">
+
+    <!-- Thống kê số lượt thích của từng video -->
+    <select id="countFavoritesByVideo" resultType="com.java4.asm2polyoe.dto.response.report.VideoFavoriteStatsDto">
+        SELECT
+        f.VideoId as videoId,
+        v.Title as title,
+        v.Poster as poster,
+        COUNT(f.Id) as likeCount
+        FROM Favorite f
+        JOIN Video v ON f.VideoId = v.Id
+        GROUP BY f.VideoId, v.Title, v.Poster
+        ORDER BY likeCount DESC
+    </select>
+
+    <!-- Lấy danh sách yêu thích theo VideoId -->
+    <select id="findFavoritesByVideoId" parameterType="string" resultType="com.java4.asm2polyoe.entity.Favorite">
+        SELECT Id as id, UserId as userId, VideoId as videoId, LikeDate as likeDate
+        FROM Favorite
+        WHERE VideoId = #{videoId}
+    </select>
+
+    <!-- Lấy danh sách chia sẻ theo VideoId -->
+    <select id="findSharesByVideoId" parameterType="string" resultType="com.java4.asm2polyoe.entity.Share">
+        SELECT Id as id, UserId as userId, VideoId as videoId, Emails as emails, ShareDate as shareDate
+        FROM Share
+        WHERE VideoId = #{videoId}
+    </select>
+
+    <!-- Thống kê chung -->
+    <select id="countAllUsers" resultType="long">
+        SELECT COUNT(Id) FROM [User]
+    </select>
+
+    <select id="countAllVideos" resultType="long">
+        SELECT COUNT(Id) FROM Video
+    </select>
+
+    <select id="countAllFavorites" resultType="long">
+        SELECT COUNT(Id) FROM Favorite
+    </select>
+
+    <select id="countAllShares" resultType="long">
+        SELECT COUNT(Id) FROM Share
+    </select>
+
+    <select id="sumAllVideoViews" resultType="long">
+        SELECT ISNULL(SUM(Views), 0) FROM Video
+    </select>
+
+</mapper>
