@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java4.asm2polyoe.mapper.FavoriteMapper">
+    <select id="findAll" resultType="com.java4.asm2polyoe.entity.Favorite">
+        SELECT Id as id, UserId as userId, VideoId as videoId, LikeDate as likeDate
+        FROM Favorite
+    </select>
+
+    <select id="findById" parameterType="long" resultType="com.java4.asm2polyoe.entity.Favorite">
+        SELECT Id as id, UserId as userId, VideoId as videoId, LikeDate as likeDate
+        FROM Favorite WHERE Id = #{id}
+    </select>
+
+    <!-- Thêm câu lệnh SELECT cho phương thức mới -->
+    <select id="findByUserIdAndVideoId" resultType="com.java4.asm2polyoe.entity.Favorite">
+        SELECT Id as id, UserId as userId, VideoId as videoId, LikeDate as likeDate
+        FROM Favorite
+        WHERE UserId = #{userId} AND VideoId = #{videoId}
+    </select>
+
+    <!-- Điều chỉnh câu lệnh INSERT -->
+    <!-- Nếu Id là cột tự động tăng (IDENTITY/AUTO_INCREMENT) trong DB, bạn không nên truyền Id vào đây. -->
+    <!-- Nếu bạn muốn lấy lại Id sau khi insert, bạn có thể dùng useGeneratedKeys và keyProperty. -->
+    <!-- Ví dụ cho SQL Server IDENTITY: -->
+    <insert id="insert" parameterType="com.java4.asm2polyoe.entity.Favorite" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Favorite (UserId, VideoId, LikeDate)
+        VALUES (#{userId}, #{videoId}, #{likeDate})
+    </insert>
+
+    <update id="update" parameterType="com.java4.asm2polyoe.entity.Favorite">
+        UPDATE Favorite
+        SET UserId = #{userId},
+        VideoId = #{videoId},
+        LikeDate = #{likeDate}
+        WHERE Id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM Favorite WHERE Id = #{id}
+    </delete>
+</mapper>

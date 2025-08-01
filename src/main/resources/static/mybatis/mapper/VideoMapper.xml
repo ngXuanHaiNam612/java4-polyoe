@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java4.asm2polyoe.mapper.VideoMapper">
+    <select id="findAll" resultType="com.java4.asm2polyoe.entity.Video">
+        SELECT Id as id, Title as title, Poster as poster, Href as href, [Views] as views, Description as description, Active as active
+        FROM Video
+    </select>
+
+    <select id="findById" parameterType="string" resultType="com.java4.asm2polyoe.entity.Video">
+        SELECT Id as id, Title as title, Poster as poster, Href as href, [Views] as views, Description as description, Active as active
+        FROM Video WHERE Id = #{id}
+    </select>
+
+    <select id="findAllByViewsDesc" resultType="com.java4.asm2polyoe.entity.Video">
+        SELECT Id as id, Title as title, Poster as poster, Href as href, [Views] as views, Description as description, Active as active
+        FROM Video
+        ORDER BY [Views] DESC
+    </select>
+
+    <!-- Thêm câu lệnh SELECT cho phương thức mới -->
+    <select id="findAllActive" resultType="com.java4.asm2polyoe.entity.Video">
+        SELECT Id as id, Title as title, Poster as poster, Href as href, [Views] as views, Description as description, Active as active
+        FROM Video
+        WHERE Active = 1 -- Chỉ lấy các video đang hoạt động
+        ORDER BY [Views] DESC
+    </select>
+
+    <insert id="insert" parameterType="com.java4.asm2polyoe.entity.Video">
+        INSERT INTO Video (Id, Title, Poster, Href, [Views], Description, Active)
+        VALUES (#{id}, #{title}, #{poster}, #{href}, #{views}, #{description}, #{active})
+    </insert>
+
+    <update id="update" parameterType="com.java4.asm2polyoe.entity.Video">
+        UPDATE Video
+        SET Title = #{title},
+        Poster = #{poster},
+        Href = #{href},
+        [Views] = #{views},
+        Description = #{description},
+        Active = #{active}
+        WHERE Id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="string">
+        DELETE FROM Video WHERE Id = #{id}
+    </delete>
+</mapper>
+

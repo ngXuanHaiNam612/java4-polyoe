@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java4.asm2polyoe.mapper.ShareMapper">
+    <select id="findAll" resultType="com.java4.asm2polyoe.entity.Share">
+        SELECT Id as id, UserId as userId, VideoId as videoId, Emails as emails, ShareDate as shareDate
+        FROM Share
+    </select>
+
+    <select id="findById" parameterType="long" resultType="com.java4.asm2polyoe.entity.Share">
+        SELECT Id as id, UserId as userId, VideoId as videoId, Emails as emails, ShareDate as shareDate
+        FROM Share WHERE Id = #{id}
+    </select>
+
+    <!-- Thêm câu lệnh SELECT cho phương thức mới -->
+    <select id="findByUserIdAndVideoIdAndEmails" resultType="com.java4.asm2polyoe.entity.Share">
+        SELECT Id as id, UserId as userId, VideoId as videoId, Emails as emails, ShareDate as shareDate
+        FROM Share
+        WHERE UserId = #{userId} AND VideoId = #{videoId} AND Emails = #{emails}
+    </select>
+
+    <!-- Điều chỉnh câu lệnh INSERT để sử dụng ID tự động tăng -->
+    <insert id="insert" parameterType="com.java4.asm2polyoe.entity.Share" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Share (UserId, VideoId, Emails, ShareDate)
+        VALUES (#{userId}, #{videoId}, #{emails}, #{shareDate})
+    </insert>
+
+    <update id="update" parameterType="com.java4.asm2polyoe.entity.Share">
+        UPDATE Share
+        SET UserId = #{userId},
+        VideoId = #{videoId},
+        Emails = #{emails},
+        ShareDate = #{shareDate}
+        WHERE Id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM Share WHERE Id = #{id}
+    </delete>
+</mapper>
+

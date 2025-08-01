@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java4.asm2polyoe.mapper.UserMapper">
+    <select id="findAll" resultType="com.java4.asm2polyoe.entity.User">
+        SELECT Id as id, Password as password, Fullname as fullname, Email as email, Admin as admin, Bio as bio
+        FROM Users
+    </select>
+
+    <select id="findById" parameterType="string" resultType="com.java4.asm2polyoe.entity.User">
+        SELECT Id as id, Password as password, Fullname as fullname, Email as email, Admin as admin, Bio as bio
+        FROM Users WHERE Id = #{id}
+    </select>
+
+    <select id="findByEmail" parameterType="string" resultType="com.java4.asm2polyoe.entity.User">
+        SELECT Id as id, Password as password, Fullname as fullname, Email as email, Admin as admin, Bio as bio
+        FROM Users WHERE Email = #{email}
+    </select>
+
+    <insert id="insert" parameterType="com.java4.asm2polyoe.entity.User">
+        INSERT INTO Users (Id, Password, Fullname, Email, Admin, Bio)
+        VALUES (#{id}, #{password}, #{fullname}, #{email}, #{admin}, #{bio})
+    </insert>
+
+    <update id="update" parameterType="com.java4.asm2polyoe.entity.User">
+        UPDATE Users
+        SET Password = #{password},
+        Fullname = #{fullname},
+        Email = #{email},
+        Admin = #{admin},
+        Bio = #{bio}
+        WHERE Id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="string">
+        DELETE FROM Users WHERE Id = #{id}
+    </delete>
+</mapper>
