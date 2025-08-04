@@ -154,7 +154,7 @@ public class UserServiceImpl implements UserService {
             if (!user.getPassword().equals(password)) {
                 throw new AppException(ErrorCode.INVALID_CREDENTIALS);
             }
-            user.setToken("dummy_jwt_token_for_" + user.getId());
+
             return user;
         } catch (AppException e) {
             throw e;

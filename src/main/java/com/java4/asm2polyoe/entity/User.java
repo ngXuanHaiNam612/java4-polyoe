@@ -18,7 +18,7 @@ public class User {
     private String email;
     private Boolean admin;
 
-    private transient String token;
     private String bio;
 }
+
 
