@@ -14,5 +14,12 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*")
                 .allowCredentials(true);
     }
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // Đăng ký thư mục 'avatars' trong 'src/main/resources/static'
+        // để có thể truy cập qua URL '/avatars/**'
+        registry.addResourceHandler("/avatars/**")
+                .addResourceLocations("file:src/main/resources/static/avatars/");
+    }
 }
 
