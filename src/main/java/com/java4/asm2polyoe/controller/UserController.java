@@ -1,19 +1,18 @@
 package com.java4.asm2polyoe.controller;
 
 import com.java4.asm2polyoe.dto.response.ApiResponse;
-import com.java4.asm2polyoe.entity.User; // Đảm bảo import đúng entity.User
+import com.java4.asm2polyoe.entity.User;
 import com.java4.asm2polyoe.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
-import java.util.Map; // Import Map
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/users") // Giữ nguyên RequestMapping hiện tại của bạn
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
-
     private final UserService userService;
 
     // --- Các phương thức CRUD hiện có ---
@@ -39,7 +38,7 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping // Endpoint này dùng cho admin tạo user mới
+    @PostMapping
     public ApiResponse<User> createUser(@RequestBody User user) {
         User createdUser = userService.save(user);
         return ApiResponse.<User>builder()
@@ -72,9 +71,8 @@ public class UserController {
     }
 
     // --- Các phương thức xác thực mới ---
-
     @PostMapping("/login")
-    public ApiResponse<User> login(@RequestBody User loginRequest) { // Sử dụng User entity trực tiếp
+    public ApiResponse<User> login(@RequestBody User loginRequest) {
         User user = userService.login(loginRequest.getId(), loginRequest.getPassword());
         return ApiResponse.<User>builder()
                 .status(200)
@@ -85,7 +83,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ApiResponse<User> register(@RequestBody User registerRequest) { // Sử dụng User entity trực tiếp
+    public ApiResponse<User> register(@RequestBody User registerRequest) {
         User newUser = userService.register(registerRequest);
         return ApiResponse.<User>builder()
                 .status(201)
@@ -108,11 +106,9 @@ public class UserController {
 
     @PutMapping("/change-password")
     public ApiResponse<User> changePassword(@RequestBody Map<String, String> requestBody) {
-        // Lấy userId từ requestBody (frontend cần gửi userId)
         String userId = requestBody.get("userId");
         String currentPassword = requestBody.get("currentPassword");
         String newPassword = requestBody.get("newPassword");
-
         User updatedUser = userService.changePassword(userId, currentPassword, newPassword);
         return ApiResponse.<User>builder()
                 .status(200)
@@ -124,7 +120,6 @@ public class UserController {
 
     @PutMapping("/profile")
     public ApiResponse<User> updateProfile(@RequestBody User user) {
-        // Lấy userId từ đối tượng user được gửi lên
         String userId = user.getId();
         User updatedUser = userService.updateProfile(userId, user);
         return ApiResponse.<User>builder()
@@ -134,6 +129,20 @@ public class UserController {
                 .message("Profile updated successfully")
                 .build();
     }
+
+    // NEW: Endpoint để tải lên avatar
+    @PostMapping("/{id}/avatar")
+    public ApiResponse<User> uploadAvatar(@PathVariable String id, @RequestParam("file") MultipartFile file) {
+        User updatedUser = userService.uploadAvatar(id, file);
+        return ApiResponse.<User>builder()
+                .status(200)
+                .success(true)
+                .data(updatedUser)
+                .message("Avatar uploaded successfully")
+                .build();
+    }
 }
+
+
 
 
